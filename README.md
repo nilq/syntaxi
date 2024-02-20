@@ -1,4 +1,4 @@
-![pypi](https://img.shields.io/pypi/v/pybadges.svg)
+![pypi](https://img.shields.io/pypi/v/syntaxi.svg)
 
 # 🚕 syntaxi
 
