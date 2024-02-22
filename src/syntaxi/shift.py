@@ -38,6 +38,9 @@ def convert_to_shift_tokens(text: str, shift_token=Token.SHIFT):
         word = match.group()
         return f"{shift_token} {word[0].lower()}{word[1:]}"
 
+    if not text:
+        return text
+
     return regex.sub(capital_word_pattern, replace_with_shift_token, text)
 
 
