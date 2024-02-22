@@ -23,13 +23,17 @@ def patched_tokenizer(tokenizer):
     original_encode = new_tokenizer.encode
     original_decode = tokenizer.decode
 
-    def patched_encode(self, text: str, **kwargs):
-        processed_text = convert_to_shift_tokens(text=text)
-        kwargs["add_special_tokens"] = True
-        return original_encode(processed_text, **kwargs)
+    def patched_encode(self, text: str | list[str], **kwargs):
+        if isinstance(text, list):
+            processed_texts = [convert_to_shift_tokens(text=text) for text in text]
+        else:
+            processed_texts = [convert_to_shift_tokens(text=text)]
 
-    def patched_decode(self, text: list[str]) -> str:
-        return convert_from_shift_tokens(original_decode(text))
+        kwargs["add_special_tokens"] = True
+        return original_encode(processed_texts, **kwargs)
+
+    def patched_decode(self, text: list[str], **kwargs) -> str:
+        return convert_from_shift_tokens(original_decode(text, **kwargs))
 
     new_tokenizer.encode = patched_encode.__get__(tokenizer)
     new_tokenizer.decode = patched_decode.__get__(tokenizer)
